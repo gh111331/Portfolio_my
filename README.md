@@ -2,6 +2,8 @@
 
 A lightweight, static portfolio made with semantic HTML, CSS, and browser JavaScript. It has no runtime dependencies or build step; shared layouts and editable content live in `assets/app.js` and `assets/styles.css`.
 
+The page shells use relative base URLs and the shared script derives the site root from them. This supports both root hosting and GitHub Pages project URLs such as `https://username.github.io/repository/`.
+
 ## Preview locally
 
 From the project folder, run:
