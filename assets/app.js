@@ -19,7 +19,14 @@ const projects = [
     ],
     outcome:
       "The project was nominated for Best Video Game among second-year projects at the 2023 Creative Computing Showcase.",
-    imageLabel: "Game screenshots to be added",
+    imageLabel: "Cover art to be added",
+    coverPath: "assets/serenity-cover.png",
+    coverAlt: "Serenity cover illustration with a character on a pale green background.",
+    videoPath: "assets/serenity-demo.mp4",
+    links: [
+      { label: "Play Serenity on itch.io", href: "https://serenitygamegdp17.itch.io/serenity" },
+    ],
+    caseStudyNote: "Add gameplay screenshots and more case study detail when they’re ready.",
   },
   {
     slug: "star-thief",
@@ -41,7 +48,12 @@ const projects = [
     ],
     outcome:
       "Won Best Video Game at the 2025 Creative Computing Showcase.",
-    imageLabel: "Game screenshots to be added",
+    imageLabel: "Cover art to be added",
+    coverPath: "assets/star-thief-cover.png",
+    coverAlt: "Star Thief title screen with a neon city skyline and a Start prompt.",
+    coverPosition: "left center",
+    videoPath: "assets/star-thief-demo.mp4",
+    caseStudyNote: "Add gameplay screenshots and more case study detail when they’re ready.",
   },
   {
     slug: "shopify-store-support",
@@ -63,6 +75,12 @@ const projects = [
     outcome:
       "Work described on the resume includes storefront maintenance, product browsing improvements, and debugging. Specific measures and examples can be added when available.",
     imageLabel: "Storefront images to be added",
+    coverPath: "assets/shopify-cover.png",
+    coverAlt: "Screenshot of the Shopify storefront with its product banner and navigation.",
+    links: [
+      { label: "View the live product on Shopify", href: "https://4143fd-3.myshopify.com/" },
+    ],
+    caseStudyNote: "Add approved storefront screenshots and more case study detail when available.",
   },
 ];
 
@@ -133,8 +151,7 @@ function projectCard(project, index) {
     <article class="project-card">
       <a class="project-visual visual-${index + 1}" href="${projectHref(project.slug)}" aria-label="View ${escapeHtml(project.title)} project">
         <span class="visual-index">0${index + 1}</span>
-        <span class="visual-mark" aria-hidden="true">${index === 0 ? "✳" : index === 1 ? "♪" : "↗"}</span>
-        <span class="visual-placeholder">${escapeHtml(project.imageLabel)}</span>
+        ${project.coverPath ? `<img class="project-card-cover" src="${siteUrl(project.coverPath)}" alt="" loading="lazy" style="object-position:${escapeHtml(project.coverPosition || "center")}" />` : `<span class="visual-mark" aria-hidden="true">${index === 0 ? "✳" : index === 1 ? "♪" : "↗"}</span><span class="visual-placeholder">${escapeHtml(project.imageLabel)}</span>`}
         <span class="visual-link" aria-hidden="true">↗</span>
       </a>
       <div class="project-card-content">
@@ -157,21 +174,22 @@ function homePage() {
     <main id="main">
       <section class="hero section-wrap" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow hero-eyebrow"><span class="status-dot" aria-hidden="true"></span> Software developer · Kingston, Ontario</p>
-          <h1 id="hero-title">Yuchen<br /><span>Huang</span><span class="period">.</span></h1>
-          <p class="hero-tagline">I make games and improve experiences on the web.</p>
-          <p class="hero-intro">I’m a computing graduate who enjoys building interactive ideas, solving technical problems, and making software easier to use. My work moves between Unity game development and Shopify web support.</p>
+          <p class="eyebrow hero-eyebrow"><span class="status-dot" aria-hidden="true"></span> Computing graduate · Kingston, Ontario</p>
+          <h1 id="hero-title">Games led me to computing<span class="period">.</span></h1>
+          <p class="hero-name">Yuchen Huang</p>
+          <p class="hero-tagline">I’ve been drawn to games and the ideas behind them for as long as I can remember. That early interest grew into a passion for making interactive experiences and led me to study computing.</p>
+          <p class="hero-intro">Since then, I’ve worked on games of my own, assisted students as a teaching assistant in a game design class on two occasions, and gained experience supporting a local store’s Shopify website.</p>
+          <p class="hero-next">I’m now looking for opportunities in software, web, or game development, where I can keep learning and contribute to thoughtful, useful experiences.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#projects">Explore my work <span aria-hidden="true">↓</span></a>
             <a class="button button-quiet" href="${siteUrl(`cv/${window.location.protocol === "file:" ? "index.html" : ""}`)}">View CV <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <aside class="hero-note" aria-label="Areas of work">
-          <span class="note-label">A few things I work with</span>
-          <ul><li>Game development</li><li>Interactive systems</li><li>Web support</li><li>Technical problem solving</li></ul>
+        <aside class="hero-note" aria-label="Experience so far">
+          <span class="note-label">The path so far</span>
+          <ul><li>Computing studies</li><li>Independent game projects</li><li>Game design TA, twice</li><li>Shopify site support</li></ul>
           <div class="note-stamp" aria-hidden="true">YK<br />→</div>
         </aside>
-        <a class="scroll-cue" href="#projects"><span aria-hidden="true">↓</span> Scroll to explore</a>
       </section>
 
       <section class="projects-section section-wrap" id="projects" aria-labelledby="projects-heading">
@@ -193,6 +211,19 @@ function homePage() {
 function detailPage(project) {
   document.title = `${project.title} — Projects — Yuchen Huang`;
   const otherProjects = projects.filter((item) => item.slug !== project.slug);
+  const projectLinks = project.links?.length
+    ? `<div class="project-resource-links" aria-label="Project links">${project.links
+        .map(
+          (link) => `<a class="button button-quiet" href="${escapeHtml(link.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)} <span aria-hidden="true">↗</span></a>`,
+        )
+        .join("")}</div>`
+    : "";
+  const projectArtwork = project.coverPath
+    ? `<figure class="detail-artwork"><img src="${siteUrl(project.coverPath)}" alt="${escapeHtml(project.coverAlt)}" loading="lazy" /></figure>`
+    : `<div class="detail-visual visual-${projects.indexOf(project) + 1}" role="img" aria-label="${escapeHtml(project.imageLabel)}"><span class="visual-index">PROJECT / ${String(projects.indexOf(project) + 1).padStart(2, "0")}</span><span class="detail-visual-mark" aria-hidden="true">${project.slug === "serenity" ? "✳" : project.slug === "star-thief" ? "♪" : "↗"}</span><span class="visual-placeholder">${escapeHtml(project.imageLabel)}</span></div>`;
+  const projectMedia = project.videoPath
+    ? `<section class="project-demo" aria-label="Project demonstration video"><div class="demo-heading"><p class="eyebrow">Video demonstration</p><a class="text-link" href="${siteUrl(project.videoPath)}" download>${escapeHtml(project.title)} video (MP4) <span aria-hidden="true">↓</span></a></div><video class="demo-player" controls playsinline preload="metadata" aria-label="Video demonstration of ${escapeHtml(project.title)}"><source src="${siteUrl(project.videoPath)}" type="video/mp4">Your browser does not support embedded video. <a href="${siteUrl(project.videoPath)}">Open the video file</a>.</video></section>`
+    : "";
   return `
     <main id="main" class="detail-page">
       <section class="detail-hero section-wrap" aria-labelledby="project-title">
@@ -206,7 +237,9 @@ function detailPage(project) {
           <div><span class="fact-label">Team</span><span>${escapeHtml(project.collaboration)}</span></div>
           <div><span class="fact-label">Tools</span><span>${project.tools.map(escapeHtml).join(", ")}</span></div>
         </div>
-        <div class="detail-visual visual-${projects.indexOf(project) + 1}" role="img" aria-label="${escapeHtml(project.imageLabel)}"><span class="visual-index">PROJECT / ${String(projects.indexOf(project) + 1).padStart(2, "0")}</span><span class="detail-visual-mark" aria-hidden="true">${project.slug === "serenity" ? "✳" : project.slug === "star-thief" ? "♪" : "↗"}</span><span class="visual-placeholder">${escapeHtml(project.imageLabel)}</span></div>
+        ${projectLinks}
+        ${projectArtwork}
+        ${projectMedia}
       </section>
       <section class="story section-wrap" aria-label="Project details">
         <div class="story-heading"><span class="eyebrow">The work</span><p>01 / Overview &amp; process</p></div>
@@ -218,7 +251,7 @@ function detailPage(project) {
           <h3>Outcome</h3>
           <p>${escapeHtml(project.outcome)}</p>
           ${project.recognition ? `<div class="recognition-note"><span class="recognition-icon" aria-hidden="true">✳</span><p><span class="eyebrow">Recognition</span><br />${escapeHtml(project.recognition)}</p></div>` : ""}
-          <p class="placeholder-note"><span aria-hidden="true">↗</span> Add project screenshots, a demo, and a more detailed case study here when they’re ready.</p>
+          <p class="placeholder-note"><span aria-hidden="true">↗</span> ${escapeHtml(project.caseStudyNote || "Add screenshots and more case study detail when available.")}</p>
         </div>
       </section>
       <section class="more-projects section-wrap" aria-labelledby="more-projects-heading"><div class="section-heading compact"><div><p class="eyebrow">Keep exploring</p><h2 id="more-projects-heading">More projects<span class="period">.</span></h2></div><a class="text-link" href="${homeProjectsUrl}">All work <span aria-hidden="true">↗</span></a></div><div class="more-project-list">${otherProjects.map((item) => `<a class="more-project-link" href="${projectHref(item.slug)}"><span><span class="eyebrow">${escapeHtml(item.kind)} · ${escapeHtml(item.year)}</span><strong>${escapeHtml(item.title)}</strong></span><span class="more-project-arrow" aria-hidden="true">↗</span></a>`).join("")}</div></section>
